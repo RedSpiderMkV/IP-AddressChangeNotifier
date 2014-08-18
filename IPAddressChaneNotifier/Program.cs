@@ -71,7 +71,6 @@ namespace IPAddressChaneNotifier
             try
             {
                 externalip = new WebClient().DownloadString("http://www.binaryworld.webspace.virginmedia.com/Content/tools/ipcheck.php");
-
                 return true;
             }
             catch (Exception)

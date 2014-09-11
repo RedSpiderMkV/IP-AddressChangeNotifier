@@ -9,13 +9,20 @@ namespace IPAddressChaneNotifier
     internal class PublicIpCheck
     {
         public string ExternalIpAddress { get; private set; }
+        private FileHandler dataFileHandler;
 
-        public bool GetExternalIpAddress()
+        public void UpdateExternalIpAddressRecord()
+        {
+            getExternalIpAddress();
+
+            dataFileHandler = new FileHandler();
+        }
+
+        private void getExternalIpAddress()
         {
             try
             {
                 ExternalIpAddress = new WebClient().DownloadString(ipCheckUrl);
-                return true;
             }
             catch (Exception)
             {

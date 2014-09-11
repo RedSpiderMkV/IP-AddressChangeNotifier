@@ -13,11 +13,22 @@ namespace IPAddressChaneNotifier
         
         private static string externalip;
         private static DateTime date;
+        private static PublicIpCheck publicIpChecker = new PublicIpCheck();
 
         static void Main(string[] args)
         {
             Console.Title = "IP Check";
             date = DateTime.Now;
+
+            try
+            {
+                publicIpChecker.UpdateExternalIpAddressRecord();
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message + Environment.NewLine + "Terminating program");
+                return;
+            }
 
             if (!getExternalIp())
             {

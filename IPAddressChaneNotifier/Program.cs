@@ -49,7 +49,7 @@ namespace IPAddressChaneNotifier
                     try
                     {
                         // Get the date in file of when ip address changed.
-                        DateTime.TryParse(contents[2], out date);
+                        DateTime.TryParse(contents[1], out date);
                     }
                     catch (Exception)
                     {
@@ -58,7 +58,7 @@ namespace IPAddressChaneNotifier
                 }
                 else
                 {
-                    File.WriteAllText(path, externalip);
+                    writeToFile(date);
                     return;
                 }
 

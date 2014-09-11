@@ -13,9 +13,9 @@ namespace IPAddressChaneNotifier
 
         public void UpdateExternalIpAddressRecord()
         {
-            getExternalIpAddress();
+            this.getExternalIpAddress();
 
-            dataFileHandler = new FileHandler();
+            dataFileHandler = new FileHandler(ExternalIpAddress);
         }
 
         private void getExternalIpAddress()

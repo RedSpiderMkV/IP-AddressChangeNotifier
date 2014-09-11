@@ -17,10 +17,34 @@ namespace IPAddressChaneNotifier
             this.currentDate = DateTime.Now;
             this.externalIpAddress = externalIpAddress;
 
-            if (File.Exists(dataFile))
+            if (!File.Exists(dataFile))
             {
-
+                this.writeDataToFile();
             }
+        }
+
+        public void WriteToFile()
+        {
+            string[] contents = File.ReadAllLines(dataFile);
+            string content;
+
+            if (contents.Length == 2)
+            {
+                content = contents[0];
+            }
+            else
+            {
+                // File appears to be missing data, write a new one.
+                writeDataToFile();
+            }
+        }
+
+        private void writeDataToFile()
+        {
+            // Clear the current contents
+            File.WriteAllText(dataFile, String.Empty);
+            // Write new contents to file
+            File.WriteAllText(dataFile, this.externalIpAddress + Environment.NewLine + currentDate.ToShortDateString());
         }
     }
 }

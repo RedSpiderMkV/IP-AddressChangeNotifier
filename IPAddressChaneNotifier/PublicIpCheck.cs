@@ -4,18 +4,34 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace IPAddressChaneNotifier
+namespace IPAddressChangeNotifier
 {
     internal class PublicIpCheck
     {
+        public delegate void NewIpAddressEvent(string NewIpAddress, DateTime ChangeDate, EventArgs e);
+        public event NewIpAddressEvent OnNewIpAddress;
+
         public string ExternalIpAddress { get; private set; }
-        private FileHandler dataFileHandler;
+        public bool IPAddressChanged = false;
 
         public void UpdateExternalIpAddressRecord()
         {
             this.getExternalIpAddress();
 
             dataFileHandler = new FileHandler(ExternalIpAddress);
+
+            if (!String.Equals(dataFileHandler.RecordedIpAddress, this.ExternalIpAddress))
+            {
+                // IP Address has changed, fire notify event and update file.
+                dataFileHandler.WriteToFile();
+
+                NewIpAddressEvent handler = OnNewIpAddress;
+                if (handler != null)
+                {
+                    handler(this.ExternalIpAddress, dataFileHandler.CurrentDate, new EventArgs());
+                    IPAddressChanged = true;
+                }
+            }
         }
 
         private void getExternalIpAddress()
@@ -31,5 +47,6 @@ namespace IPAddressChaneNotifier
         }
 
         private const string ipCheckUrl = "http://www.binaryworld.webspace.virginmedia.com/Content/tools/ipcheck.php";
+        private FileHandler dataFileHandler;
     }
 }

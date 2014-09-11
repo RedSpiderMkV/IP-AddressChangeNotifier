@@ -8,7 +8,7 @@
     <ProjectGuid>{3B258733-0EC3-42FF-A3D2-88413A29A016}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IPAddressChaneNotifier</RootNamespace>
+    <RootNamespace>IPAddressChangeNotifier</RootNamespace>
     <AssemblyName>IPAddressChaneNotifier</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>

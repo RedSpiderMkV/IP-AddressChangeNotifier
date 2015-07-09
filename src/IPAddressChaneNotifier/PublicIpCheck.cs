@@ -32,7 +32,7 @@ namespace IPAddressChangeNotifier
 
                 if (record == null || !string.Equals(record.IpAddress, externalIp))
                 {
-                    if (recordHandler.WriteIpAddressToFile(newRecord))
+                    if (recordHandler.WriteIpAddressRecordToFile(newRecord))
                     {
                         notifyIpAddressChange(newRecord);
                     } // end if
@@ -44,6 +44,10 @@ namespace IPAddressChangeNotifier
 
         #region Private Methods
 
+        /// <summary>
+        /// Notify listeners of ip address change.
+        /// </summary>
+        /// <param name="newIpRecord">New IP record.</param>
         private void notifyIpAddressChange(IpRecord newIpRecord)
         {
             NewIpAddressEvent handler = OnNewIpAddress;

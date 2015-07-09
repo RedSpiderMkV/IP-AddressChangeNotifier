@@ -75,14 +75,14 @@ namespace IPAddressChangeNotifier
         {
             try
             {
-                string jsonResponse = new WebClient().DownloadString(ipCheckUrl);
+                string jsonResponse = new WebClient().DownloadString(ipCheckUrl_m);
                 jsonResponse = jsonResponse.Split(':')[1].Replace('"', ' ').Trim();
 
                 ExternalIpAddress = jsonResponse.Substring(0, jsonResponse.Length - 1).Trim();
             }
             catch (Exception)
             {
-                throw new Exception("Error retrieving IP address from url " + ipCheckUrl);
+                throw new Exception("Error retrieving IP address from url " + ipCheckUrl_m);
             } // end try-catch
         } // end method
 
@@ -91,7 +91,7 @@ namespace IPAddressChangeNotifier
         #region Private Data
 
         // Address checking URL.
-        private const string ipCheckUrl = "http://www.portvisibility.co.uk/visibility/tools/myip.php";
+        private const string ipCheckUrl_m = "http://www.portvisibility.co.uk/visibility/tools/myip.php";
 
         #endregion
     } // end class

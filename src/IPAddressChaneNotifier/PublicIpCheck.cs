@@ -8,17 +8,35 @@ namespace IPAddressChangeNotifier
 {
     internal class PublicIpCheck
     {
+        #region Events
+
         public delegate void NewIpAddressEvent(string NewIpAddress, DateTime ChangeDate, EventArgs e);
         public event NewIpAddressEvent OnNewIpAddress;
 
+        #endregion
+
+        #region Properties
+
         public string ExternalIpAddress { get; private set; }
-        public bool IPAddressChanged = false;
+        public bool IPAddressChanged { get; private set; }
+
+        #endregion
+
+        #region Public Methods
 
         public void UpdateExternalIpAddressRecord()
         {
-            this.getExternalIpAddress();
+            getExternalIpAddress();
+            updateAndNotifyIpAddressChange();
+        } // end method
 
-            dataFileHandler = new FileHandler(ExternalIpAddress);
+        #endregion
+
+        #region Private Methods
+
+        private void updateAndNotifyIpAddressChange()
+        {
+            FileHandler dataFileHandler = new FileHandler(ExternalIpAddress);
 
             if (!String.Equals(dataFileHandler.RecordedIpAddress, this.ExternalIpAddress))
             {
@@ -30,9 +48,9 @@ namespace IPAddressChangeNotifier
                 {
                     handler(this.ExternalIpAddress, dataFileHandler.CurrentDate, new EventArgs());
                     IPAddressChanged = true;
-                }
-            }
-        }
+                } // end if
+            } // end if
+        } // end method
 
         private void getExternalIpAddress()
         {
@@ -43,10 +61,15 @@ namespace IPAddressChangeNotifier
             catch (Exception)
             {
                 throw new Exception("Error retrieving IP address from url " + ipCheckUrl);
-            }
-        }
+            } // end try-catch
+        } // end method
+
+        #endregion
+
+        #region Private Data
 
         private const string ipCheckUrl = "http://www.binaryworld.webspace.virginmedia.com/Content/tools/ipcheck.php";
-        private FileHandler dataFileHandler;
-    }
-}
+
+        #endregion
+    } // end class
+} // end namespace

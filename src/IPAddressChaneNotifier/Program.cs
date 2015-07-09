@@ -11,17 +11,19 @@ namespace IPAddressChangeNotifier
             try
             {
                 PublicIpCheck publicIpChecker = new PublicIpCheck();
-                publicIpChecker.UpdateExternalIpAddressRecord();
+                publicIpChecker.OnNewIpAddress += new PublicIpCheck.NewIpAddressEvent(publicIpChecker_OnNewIpAddress);
 
-                if (publicIpChecker.IPAddressChanged)
-                {
-                    System.Windows.Forms.MessageBox.Show("IP Address changed.  New IP: " + publicIpChecker.ExternalIpAddress);
-                } // end if
+                publicIpChecker.UpdateExternalIpAddressRecord();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show(e.Message + Environment.NewLine + "Terminating program");
+                // pass silently
             } // end try-catch
+        }
+
+        static void publicIpChecker_OnNewIpAddress(string NewIpAddress, DateTime ChangeDate, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("IP Address changed.  New IP: " + NewIpAddress);
         } // end method
     } // end class
 } // end namespace

@@ -15,20 +15,6 @@ namespace IPAddressChangeNotifier
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Public IP address.
-        /// </summary>
-        public string ExternalIpAddress { get; private set; }
-        
-        /// <summary>
-        /// Flag indicating whether new IP is different to recorded IP.
-        /// </summary>
-        public bool IPAddressChanged { get; private set; }
-
-        #endregion
-
         #region Public Methods
 
         /// <summary>
@@ -36,50 +22,52 @@ namespace IPAddressChangeNotifier
         /// </summary>
         public void UpdateExternalIpAddressRecord()
         {
-            getExternalIpAddress();
-            updateAndNotifyIpAddressChange();
+            IpRecordFileHandler recordHandler = new IpRecordFileHandler();
+            IpRecord record = recordHandler.GetIpRecord();
+            string externalIp = getExternalIpAddress();
+
+            if (externalIp != null)
+            {
+                IpRecord newRecord = new IpRecord(externalIp, DateTime.Now);
+
+                if (record == null || !string.Equals(record.IpAddress, externalIp))
+                {
+                    if (recordHandler.WriteIpAddressToFile(newRecord))
+                    {
+                        notifyIpAddressChange(newRecord);
+                    } // end if
+                } // end if
+            } // end if
         } // end method
 
         #endregion
 
         #region Private Methods
 
-        /// <summary>
-        /// Update IP address and notify any listeners if address has changed.
-        /// </summary>
-        private void updateAndNotifyIpAddressChange()
+        private void notifyIpAddressChange(IpRecord newIpRecord)
         {
-            FileHandler dataFileHandler = new FileHandler(ExternalIpAddress);
-
-            if (!String.Equals(dataFileHandler.RecordedIpAddress, this.ExternalIpAddress))
+            NewIpAddressEvent handler = OnNewIpAddress;
+            if (handler != null)
             {
-                // IP Address has changed, fire notify event and update file.
-                dataFileHandler.WriteToFile();
-
-                NewIpAddressEvent handler = OnNewIpAddress;
-                if (handler != null)
-                {
-                    handler(this.ExternalIpAddress, dataFileHandler.CurrentDate, new EventArgs());
-                    IPAddressChanged = true;
-                } // end if
+                handler(newIpRecord.IpAddress, newIpRecord.RecordDate, new EventArgs());
             } // end if
         } // end method
 
         /// <summary>
         /// Retrieve the external IP address via web request.
         /// </summary>
-        private void getExternalIpAddress()
+        private string getExternalIpAddress()
         {
             try
             {
                 string jsonResponse = new WebClient().DownloadString(ipCheckUrl_m);
                 jsonResponse = jsonResponse.Split(':')[1].Replace('"', ' ').Trim();
 
-                ExternalIpAddress = jsonResponse.Substring(0, jsonResponse.Length - 1).Trim();
+                return jsonResponse.Substring(0, jsonResponse.Length - 1).Trim();
             }
             catch (Exception)
             {
-                throw new Exception("Error retrieving IP address from url " + ipCheckUrl_m);
+                return null;
             } // end try-catch
         } // end method
 

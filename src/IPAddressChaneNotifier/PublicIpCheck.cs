@@ -56,7 +56,10 @@ namespace IPAddressChangeNotifier
         {
             try
             {
-                ExternalIpAddress = new WebClient().DownloadString(ipCheckUrl);
+                string jsonResponse = new WebClient().DownloadString(ipCheckUrl);
+                jsonResponse = jsonResponse.Split(':')[1].Replace('"', ' ').Trim();
+
+                ExternalIpAddress = jsonResponse.Substring(0, jsonResponse.Length - 1).Trim();
             }
             catch (Exception)
             {
@@ -68,7 +71,7 @@ namespace IPAddressChangeNotifier
 
         #region Private Data
 
-        private const string ipCheckUrl = "http://www.binaryworld.webspace.virginmedia.com/Content/tools/ipcheck.php";
+        private const string ipCheckUrl = "http://www.portvisibility.co.uk/visibility/tools/myip.php";
 
         #endregion
     } // end class

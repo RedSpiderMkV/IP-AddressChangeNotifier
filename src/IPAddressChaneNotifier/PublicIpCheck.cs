@@ -6,6 +6,9 @@ using System.Text;
 
 namespace IPAddressChangeNotifier
 {
+    /// <summary>
+    /// Check and record external IP address.
+    /// </summary>
     internal class PublicIpCheck
     {
         #region Events
@@ -17,13 +20,23 @@ namespace IPAddressChangeNotifier
 
         #region Properties
 
+        /// <summary>
+        /// Public IP address.
+        /// </summary>
         public string ExternalIpAddress { get; private set; }
+        
+        /// <summary>
+        /// Flag indicating whether new IP is different to recorded IP.
+        /// </summary>
         public bool IPAddressChanged { get; private set; }
 
         #endregion
 
         #region Public Methods
 
+        /// <summary>
+        /// Update the IP address information after retrieving it.
+        /// </summary>
         public void UpdateExternalIpAddressRecord()
         {
             getExternalIpAddress();
@@ -34,6 +47,9 @@ namespace IPAddressChangeNotifier
 
         #region Private Methods
 
+        /// <summary>
+        /// Update IP address and notify any listeners if address has changed.
+        /// </summary>
         private void updateAndNotifyIpAddressChange()
         {
             FileHandler dataFileHandler = new FileHandler(ExternalIpAddress);
@@ -52,6 +68,9 @@ namespace IPAddressChangeNotifier
             } // end if
         } // end method
 
+        /// <summary>
+        /// Retrieve the external IP address via web request.
+        /// </summary>
         private void getExternalIpAddress()
         {
             try
@@ -71,6 +90,7 @@ namespace IPAddressChangeNotifier
 
         #region Private Data
 
+        // Address checking URL.
         private const string ipCheckUrl = "http://www.portvisibility.co.uk/visibility/tools/myip.php";
 
         #endregion

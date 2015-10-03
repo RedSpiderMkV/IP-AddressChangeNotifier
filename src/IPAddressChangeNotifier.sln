@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPAddressChangeNotifier", "IPAddressChaneNotifier\IPAddressChangeNotifier.csproj", "{3B258733-0EC3-42FF-A3D2-88413A29A016}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPAddressChangeNotifier", "IPAddressChangeNotifier\IPAddressChangeNotifier.csproj", "{3B258733-0EC3-42FF-A3D2-88413A29A016}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

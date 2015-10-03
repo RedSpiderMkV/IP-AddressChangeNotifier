@@ -1,0 +1,5 @@
+C:\Users\Nikeah\Documents\Git\IP-AddressChangeNotifier\src\IPAddressChangeNotifier\bin\Debug\IPAddressChaneNotifier.exe
+C:\Users\Nikeah\Documents\Git\IP-AddressChangeNotifier\src\IPAddressChangeNotifier\bin\Debug\IPAddressChaneNotifier.pdb
+C:\Users\Nikeah\Documents\Git\IP-AddressChangeNotifier\src\IPAddressChangeNotifier\obj\x86\Debug\IPAddressChangeNotifier.csprojResolveAssemblyReference.cache
+C:\Users\Nikeah\Documents\Git\IP-AddressChangeNotifier\src\IPAddressChangeNotifier\obj\x86\Debug\IPAddressChaneNotifier.exe
+C:\Users\Nikeah\Documents\Git\IP-AddressChangeNotifier\src\IPAddressChangeNotifier\obj\x86\Debug\IPAddressChaneNotifier.pdb

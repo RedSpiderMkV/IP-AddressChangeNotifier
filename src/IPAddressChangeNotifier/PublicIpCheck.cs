@@ -80,7 +80,7 @@ namespace IPAddressChangeNotifier
         #region Private Data
 
         // Address checking URL.
-        private const string ipCheckUrl_m = "http://www.portvisibility.co.uk/visibility/tools/myip.php";
+        private const string ipCheckUrl_m = "http://www.portvisibility.co.uk/visibility/tools/myip.php&format=json";
 
         #endregion
     } // end class

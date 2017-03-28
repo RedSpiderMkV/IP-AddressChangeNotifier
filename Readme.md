@@ -1,9 +1,10 @@
 IP Address Change Notifier
----------------------------------------
+===========
 
 Notifies you when your public IP address changes.
 
-###Log File
+Log File
+---------------------------------------
 
 A log file is created with the date the IP address was changed along with the new IP address.
 

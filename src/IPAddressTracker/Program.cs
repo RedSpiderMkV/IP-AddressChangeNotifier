@@ -35,26 +35,42 @@ namespace IPAddressTracker
             {
                 _logger.Information($"IP address mismatch, new IP Address: {remoteIPAddress}");
                 ipAddressFileManager.UpdateIPAddress(recordedIPAddress);
-
-                _logger.Information($"Launching external program on IP change: {_appConfigurationManager.ExternalIPAddressChangeExe}");
-                var psi = new ProcessStartInfo
-                {
-                    FileName = _appConfigurationManager.ExternalIPAddressChangeExe,
-                    Arguments = _appConfigurationManager.ExternalExeArgs,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-
-                using (var process = Process.Start(psi))
-                {
-                    process.WaitForExit();
-                }
+                
+                RunExternalIPChangeExecutable();
             }
 
             _logger.Information("====================================");
             _logger.Information("External IP Address Check - complete");
+        }
+
+        private static void RunExternalIPChangeExecutable()
+        {
+            _logger.Information($"Launching external program on IP change: {_appConfigurationManager.ExternalIPAddressChangeExe}");
+            var psi = new ProcessStartInfo
+            {
+                FileName = _appConfigurationManager.ExternalIPAddressChangeExe,
+                Arguments = _appConfigurationManager.ExternalExeArgs,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using (var process = Process.Start(psi))
+            {
+                while (!process.StandardOutput.EndOfStream)
+                {
+                    _logger.Information($"External program: {process.StandardOutput.ReadLine()}");
+                }
+
+                string error = process.StandardError.ReadToEnd();
+                if (!string.IsNullOrEmpty(error))
+                {
+                    _logger.Error($"External program error: {error}");
+                }
+
+                process.WaitForExit();
+            }
         }
 
         private static ILogger GetLogger()

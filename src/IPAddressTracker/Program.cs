@@ -34,7 +34,7 @@ namespace IPAddressTracker
             if (!recordedIPAddress.Equals(remoteIPAddress))
             {
                 _logger.Information($"IP address mismatch, new IP Address: {remoteIPAddress}");
-                ipAddressFileManager.UpdateIPAddress(recordedIPAddress);
+                ipAddressFileManager.UpdateIPAddress(remoteIPAddress);
                 
                 RunExternalIPChangeExecutable();
             }

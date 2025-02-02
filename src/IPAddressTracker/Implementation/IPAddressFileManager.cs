@@ -40,6 +40,7 @@ namespace IPAddressTracker.Implementation
 
         public void UpdateIPAddress(string ipAddress)
         {
+            _logger.Information($"Writing {ipAddress} to {_ipAddressFile}");
             File.WriteAllText(_ipAddressFile, ipAddress);
         }
 

@@ -49,7 +49,7 @@ namespace IPAddressTracker
 
                 using (var process = Process.Start(psi))
                 {
-                    process.WaitForExit(); // Waits for the process to finish
+                    process.WaitForExit();
                 }
             }
 

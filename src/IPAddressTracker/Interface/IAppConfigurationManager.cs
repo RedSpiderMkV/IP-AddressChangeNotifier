@@ -1,9 +1,11 @@
 ﻿
 namespace IPAddressTracker.Interface
 {
-    internal interface IAppConfigurationManager
+    public interface IAppConfigurationManager
     {
-        string? IPAddressFilePath { get; }
-        string? LogFile { get; }
+        string IPAddressFilePath { get; }
+        string LogFile { get; }
+        string ExternalIPAddressChangeExe { get; }
+        string ExternalExeArgs { get; }
     }
 }

@@ -1,10 +1,9 @@
-﻿using Autofac;
+﻿using System.Diagnostics;
+using Autofac;
 using IPAddressTracker.Implementation;
 using IPAddressTracker.Interface;
 using Serilog;
 using Serilog.Events;
-using System.Reflection.Metadata;
-using System.Text;
 
 namespace IPAddressTracker
 {
@@ -17,12 +16,42 @@ namespace IPAddressTracker
         public static void Main(string[] args)
         {
             _appConfigurationManager = new AppConfigurationManager();
-
             _logger = GetLogger();
+            _container = BuildContainer();
+
             _logger.Information("IP Address Check");
             _logger.Information("================");
 
-            _logger.Information($"IP Address File: {_appConfigurationManager.IPAddressFilePath}");
+            var ipAddressFileManager = _container.Resolve<IIPAddressFileManager>();
+            var ipAddressRemoteReader = _container.Resolve<IIPAddressRemoteReader>();
+
+            string recordedIPAddress = ipAddressFileManager.IPAddress;
+            string remoteIPAddress = ipAddressRemoteReader.GetIPAddress();
+
+            _logger.Information($"Current IP Address recorded: {recordedIPAddress}");
+            _logger.Information($"IP Address from remote: {remoteIPAddress}");
+
+            if (!recordedIPAddress.Equals(remoteIPAddress))
+            {
+                _logger.Information($"IP address mismatch, new IP Address: {remoteIPAddress}");
+                ipAddressFileManager.UpdateIPAddress(recordedIPAddress);
+
+                _logger.Information($"Launching external program on IP change: {_appConfigurationManager.ExternalIPAddressChangeExe}");
+                var psi = new ProcessStartInfo
+                {
+                    FileName = _appConfigurationManager.ExternalIPAddressChangeExe,
+                    Arguments = _appConfigurationManager.ExternalExeArgs,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using (var process = Process.Start(psi))
+                {
+                    process.WaitForExit(); // Waits for the process to finish
+                }
+            }
 
             _logger.Information("====================================");
             _logger.Information("External IP Address Check - complete");
@@ -36,6 +65,18 @@ namespace IPAddressTracker
                 .CreateLogger();
 
             return logger;
+        }
+
+        private static IContainer BuildContainer()
+        {
+            var builder = new ContainerBuilder();
+            builder.Register(x => _logger).As<ILogger>().SingleInstance();
+            builder.Register(x => _appConfigurationManager).As<IAppConfigurationManager>().SingleInstance();
+
+            builder.RegisterType<IPAddressFileManager>().As<IIPAddressFileManager>();
+            builder.RegisterType<IPAddressRemoteReader>().As<IIPAddressRemoteReader>();
+
+            return builder.Build();
         }
     }
 }

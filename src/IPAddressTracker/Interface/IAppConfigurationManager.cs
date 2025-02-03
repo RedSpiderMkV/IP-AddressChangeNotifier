@@ -7,5 +7,6 @@ namespace IPAddressTracker.Interface
         string LogFile { get; }
         string ExternalIPAddressChangeExe { get; }
         string ExternalExeArgs { get; }
+        bool ForceExternalExe { get; }
     }
 }

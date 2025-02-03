@@ -31,7 +31,7 @@ namespace IPAddressTracker
             _logger.Information($"Current IP Address recorded: {recordedIPAddress}");
             _logger.Information($"IP Address from remote: {remoteIPAddress}");
 
-            if (!recordedIPAddress.Equals(remoteIPAddress))
+            if (_appConfigurationManager.ForceExternalExe || !recordedIPAddress.Equals(remoteIPAddress))
             {
                 _logger.Information($"IP address mismatch, new IP Address: {remoteIPAddress}");
                 ipAddressFileManager.UpdateIPAddress(remoteIPAddress);
